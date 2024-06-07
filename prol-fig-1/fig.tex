@@ -1,0 +1,73 @@
+\documentclass{article}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary {arrows.meta,automata,positioning}
+
+\begin{document}
+\def\seqone{{1,1,1,1,1,1,1,0,1,0}}
+\def\seqtwo{{1, 0, 1, 0, 1, 0, 1, 1, 1, 1}}
+
+\begin{figure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{
+            \begin{tikzpicture}
+                \draw (1, 2) node[circle,draw=green!90,fill=green!20, very thick, minimum size=1, label=Bernoulli$(p)$] {1};
+                \tikz \foreach \i in {0,...,9}
+                    \draw (\i+1,0) node[circle,draw=green!90,fill=green!20, very thick, minimum size=1] {\pgfmathparse{\seqone[\i]}\pgfmathresult};
+                \draw (0.5, 0.3) node {$\dots$};
+            \end{tikzpicture}
+        }
+        \caption{Scenario 1}   
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{
+            \begin{tikzpicture}
+                \draw (1, 2) node[circle,draw=green!90,fill=green!20, very thick, minimum size=1, label=Bernoulli$(p)$] {1};
+                \draw (4, 2) node[circle,draw=red!90,fill=red!20, very thick, minimum size=1, label=Bernoulli$(1-p)$] {1};
+                \tikz \foreach \i in {0,...,9}{
+                    \pgfmathsetmacro{\col}{ifthenelse(Mod(\i,2)==1,"red","green")};
+                    \draw (\i+1,0) node[circle,draw=\col!90,fill=\col!20, very thick, minimum size=1] {\pgfmathparse{\seqtwo[\i]}\pgfmathresult};
+                };
+                \draw (0.5, 0.3) node {$\dots$};
+            \end{tikzpicture}
+        }
+        \caption{Scenario 2}   
+    \end{subfigure}
+    \par\bigskip\bigskip\bigskip\bigskip\bigskip
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{
+            \begin{tikzpicture}[statenode/.style={circle, draw=blue!60, fill=blue!5, very thick, minimum size=1}]
+                \draw (1, 2) node[statenode] (state0) {0};
+                \node[statenode] (state1) [right=of state0] {1};
+                \path[->] (state0) edge [bend left, above] node{$0.9$} (state1);
+                \path[->] (state1) edge [bend left, below] node{$0.9$} (state0);
+                \path[->] (state0) edge [loop above] node{$0.1$} (state0);
+                \path[->] (state1) edge [loop above] node{$0.1$} (state1);
+                \tikz \foreach \i in {0,...,9}
+                \draw (\i+1,0) node[circle,draw=blue!90,fill=blue!20, very thick, minimum size=1] {\pgfmathparse{\seqone[\i]}\pgfmathresult};
+                \draw (0.5, 0.3) node {$\dots$};
+            \end{tikzpicture}
+        }
+        \caption{Scenario 3}   
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \resizebox{\linewidth}{!}{
+            \begin{tikzpicture}
+                \tikz \foreach \i in {0,...,9}
+                    \draw (\i+1,0) node[circle,draw=orange!90,fill=orange!20, very thick, minimum size=1] {\pgfmathparse{\seqone[\i]}\pgfmathresult};
+                \draw (0.5, 0.3) node {$\dots$};
+            \end{tikzpicture}
+        }
+        \caption{Scenario 4}   
+    \end{subfigure}
+\end{figure}
+\end{document}
